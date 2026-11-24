@@ -35,3 +35,13 @@ const order = await api("POST", "/orders", {
 console.log("Order", order.id, order.status, order.fulfillment);
 // When order.fulfillment.requires_otp becomes true:
 // await api("POST", `/orders/${order.id}/otp`, { otp: "123456" });
+
+// Saved accounts: every completed order saves the game account it used.
+// Filter by email, order_id or game; sort by date or order_id, asc or desc.
+const saved = await api("GET", `/accounts?game=54&email=${encodeURIComponent(email)}&sort=order_id&order=desc`);
+console.log("Saved accounts:", saved.items.map((a) => `${a.id} ${a.title} (last order ${a.last_order_id})`));
+if (saved.items[0]) {
+  // Order again without sending the fields: they come from the saved account.
+  const again = await api("POST", "/orders", { product_id: gems.id, account_id: saved.items[0].id });
+  console.log("Repeat order", again.id, again.status);
+}

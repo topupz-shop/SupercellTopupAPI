@@ -131,9 +131,13 @@ Clash Royale gems and Diamond Pass (category `56`), Hay Day diamonds and Farm Pa
 | `GET` / `PUT` | `/callbacks` | Read or save webhook URLs |
 | `GET` | `/callbacks/log` | Every callback sent to you (catch up on missed ones) |
 
-Full reference with every response: **[topupz.shop/docs](https://topupz.shop/en/docs)** · Postman collection on the same page.
+Full reference with every response: **[topupz.shop/docs](https://topupz.shop/en/docs)** · Postman collection on the same page. Press <kbd>Ctrl</kbd> <kbd>K</kbd> there to search the docs.
+
+<p align="center"><img src="screenshots/05-search.png" alt="Search the Topupz API docs" width="560"></p>
 
 ## 💾 Saved accounts
+
+<p align="center"><img src="screenshots/04-saved-accounts.png" alt="Saved accounts API: filter by email, order or game" width="900"></p>
 
 Every completed order saves the game account it used (Player ID / Supercell ID email, never passwords), once per game. List them to repeat an order without asking your customer again.
 

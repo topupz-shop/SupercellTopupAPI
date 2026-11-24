@@ -41,3 +41,19 @@ $order = api('POST', '/orders', [
 echo "Order {$order['id']} {$order['status']}\n";
 // When $order['fulfillment']['requires_otp'] is true:
 // api('POST', "/orders/{$order['id']}/otp", ['otp' => '123456']);
+
+// Saved accounts: every completed order saves the game account it used.
+// Filter by email, order_id or game; sort by date or order_id, asc or desc.
+$saved = api('GET', '/accounts?' . http_build_query([
+    'game' => 57, 'email' => $email, 'sort' => 'order_id', 'order' => 'asc',
+]));
+foreach ($saved['items'] as $account) {
+    echo "Saved: {$account['id']} {$account['title']} (last order {$account['last_order_id']})
+";
+}
+if (! empty($saved['items'])) {
+    // Order again without sending the fields: they come from the saved account.
+    $again = api('POST', '/orders', ['product_id' => $pack['id'], 'account_id' => $saved['items'][0]['id']]);
+    echo "Repeat order {$again['id']} {$again['status']}
+";
+}
