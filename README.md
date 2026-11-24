@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <img src="screenshots/01-introduction.png" alt="Topupz Supercell top-up API documentation" width="900">
+  <img src="screenshots/01-introduction-hd.png" alt="Topupz Supercell top-up API documentation" width="900">
 </p>
 
 ---
@@ -133,11 +133,11 @@ Clash Royale gems and Diamond Pass (category `56`), Hay Day diamonds and Farm Pa
 
 Full reference with every response: **[topupz.shop/docs](https://topupz.shop/en/docs)** · Postman collection on the same page. Press <kbd>Ctrl</kbd> <kbd>K</kbd> there to search the docs.
 
-<p align="center"><img src="screenshots/05-search.png" alt="Search the Topupz API docs" width="560"></p>
+<p align="center"><img src="screenshots/05-search-hd.png" alt="Search the Topupz API docs" width="560"></p>
 
 ## 💾 Saved accounts
 
-<p align="center"><img src="screenshots/04-saved-accounts.png" alt="Saved accounts API: filter by email, order or game" width="900"></p>
+<p align="center"><img src="screenshots/04-saved-accounts-hd.png" alt="Saved accounts API: filter by email, order or game" width="900"></p>
 
 Every completed order saves the game account it used (Player ID / Supercell ID email, never passwords), once per game. List them to repeat an order without asking your customer again.
 
@@ -184,7 +184,7 @@ curl -X POST https://api.topupz.shop/api/v1/reseller/orders   -H "X-API-Key: tpz
 
 ## 🔁 Order flow and OTP
 
-<p align="center"><img src="screenshots/02-create-order.png" alt="Create a Supercell top-up order with the API" width="900"></p>
+<p align="center"><img src="screenshots/02-create-order-hd.png" alt="Create a Supercell top-up order with the API" width="900"></p>
 
 1. `POST /orders` → the wallet is charged and you get the order back (`201`).
 2. Read `fulfillment.requires_otp`. When it becomes `true`, Supercell has emailed a login code to the player.
@@ -214,7 +214,7 @@ curl -X POST https://api.topupz.shop/api/v1/reseller/orders   -H "X-API-Key: tpz
 
 ## 📡 Webhooks / callbacks
 
-<p align="center"><img src="screenshots/03-webhook-callback.png" alt="Supercell top-up API webhooks" width="900"></p>
+<p align="center"><img src="screenshots/03-webhook-callback-hd.png" alt="Supercell top-up API webhooks" width="900"></p>
 
 Save a `success_url` and a `fail_url` (dashboard or `PUT /callbacks`). We POST JSON when an order finishes, needs a code, or fails:
 
