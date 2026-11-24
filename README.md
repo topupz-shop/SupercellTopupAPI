@@ -25,6 +25,7 @@
 - [Clash of Clans Gems API](#-clash-of-clans-gems-api)
 - [Clash Royale & Hay Day API](#-clash-royale--hay-day-api)
 - [Endpoints](#-endpoints)
+- [Saved accounts](#-saved-accounts)
 - [Order flow and OTP](#-order-flow-and-otp)
 - [Webhooks / callbacks](#-webhooks--callbacks)
 - [Errors](#-errors)
@@ -36,6 +37,7 @@
 - 💳 Place top-up orders paid from your Topupz USD wallet
 - 🔐 Submit the Supercell login code (OTP) when an order needs it
 - 📡 Get webhooks when an order completes, needs a code, or fails
+- 💾 Reuse saved game accounts: filter by email, order or game, sort by date or order id
 - 📊 Reconcile every balance change through wallet transactions
 - 🌍 Prices in your currency (`X-Currency`) and names in your language (`X-Locale`)
 
@@ -117,17 +119,64 @@ Clash Royale gems and Diamond Pass (category `56`), Hay Day diamonds and Farm Pa
 | `GET` | `/categories/{id}/checkout-fields` | Fields an order needs (e.g. `supercell_id_email`) |
 | `GET` | `/products` | Products, filter with `?category_id=` |
 | `GET` | `/products/{slug}` | One product with regional price |
-| `POST` | `/orders` | Place an order, paid from the wallet |
+| `POST` | `/orders` | Place an order, paid from the wallet (send `fields` or a saved `account_id`) |
 | `GET` | `/orders` | Your orders, paginated |
 | `GET` | `/orders/{id}` | One order with fulfillment status |
 | `POST` | `/orders/{id}/otp` | Submit the Supercell login code |
 | `POST` | `/orders/{id}/cancel` | Cancel while the order allows it |
+| `GET` | `/accounts` | Saved game accounts, with filters and sorting |
+| `GET` | `/accounts/{id}` | One saved account |
 | `GET` | `/transactions` | Wallet transactions |
 | `GET` | `/transactions/{id}` | One transaction |
 | `GET` / `PUT` | `/callbacks` | Read or save webhook URLs |
 | `GET` | `/callbacks/log` | Every callback sent to you (catch up on missed ones) |
 
 Full reference with every response: **[topupz.shop/docs](https://topupz.shop/en/docs)** · Postman collection on the same page.
+
+## 💾 Saved accounts
+
+Every completed order saves the game account it used (Player ID / Supercell ID email, never passwords), once per game. List them to repeat an order without asking your customer again.
+
+```bash
+curl "https://api.topupz.shop/api/v1/reseller/accounts?game=brawl-stars&email=player&sort=order_id&order=asc"   -H "X-API-Key: tpz_your_api_key"
+```
+
+| Query | Meaning |
+|---|---|
+| `email` | Part of the saved email or title, not case sensitive |
+| `order_id` | The account used on that order |
+| `game` | Category id (`54`) or slug (`brawl-stars`). `category_id` works too |
+| `sort` | `date` (last used, default), `created_at`, `order_id` (last order), `id` |
+| `order` | `desc` (default) or `asc` |
+| `per_page` | 1 – 100 (default 20) |
+
+```json
+{
+  "success": true,
+  "message": null,
+  "data": {
+    "items": [
+      {
+        "id": 31,
+        "title": "player@gmail.com",
+        "game": { "id": 54, "slug": "brawl-stars", "title": "Brawl Stars", "image": "https://..." },
+        "fields": [{ "name": "supercell_id_email", "label": "Supercell ID email", "value": "player@gmail.com" }],
+        "orders": 4,
+        "last_order_id": 1042,
+        "last_used_at": "2026-11-20T14:05:00+00:00",
+        "created_at": "2026-10-08T03:00:00+00:00"
+      }
+    ],
+    "meta": { "current_page": 1, "last_page": 1, "per_page": 20, "total": 1 }
+  }
+}
+```
+
+Order again with a saved account. Its fields are filled in for you (fields you send still win, and an account from another game returns `422`):
+
+```bash
+curl -X POST https://api.topupz.shop/api/v1/reseller/orders   -H "X-API-Key: tpz_your_api_key"   -H "Content-Type: application/json"   -d '{"product_id":12,"account_id":31}'
+```
 
 ## 🔁 Order flow and OTP
 
